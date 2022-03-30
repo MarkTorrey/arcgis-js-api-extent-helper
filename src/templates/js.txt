@@ -6,7 +6,7 @@ require([
 ],
 function(Map, SceneView, MapView) {
   var map = new Map({
-    basemap: "topo-vector"
+    basemap: "hybrid"
   });
   
   var viewOptions = {

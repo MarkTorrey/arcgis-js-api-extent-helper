@@ -1,18 +1,30 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.scss";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import CalciteThemeProvider from "calcite-react/CalciteThemeProvider";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+// Calcite:
+import "@esri/calcite-components/dist/calcite/calcite.css";
+import { setAssetPath } from "@esri/calcite-components/dist/components";
+
+// all packages we use should be included here:
+import "@esri/calcite-components/dist/components/calcite-button";
+import "@esri/calcite-components/dist/components/calcite-icon";
+import "@esri/calcite-components/dist/components/calcite-modal";
+
+setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
+
+
 
 ReactDOM.render(
-  <CalciteThemeProvider>
+  <React.StrictMode>
     <App />
-  </CalciteThemeProvider>,
-  document.getElementById("root")
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

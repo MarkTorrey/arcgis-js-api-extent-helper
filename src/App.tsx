@@ -1,47 +1,20 @@
-import React, { useState } from "react";
-import { Map } from "@esri/react-arcgis";
-import { loadModules } from "esri-loader";
-import ExtentDetails from "./components/ExtentDetails";
-import MapView from "esri/views/MapView";
+import { useState } from 'react';
+import Map from './components/Map';
+import ExtentDetails from './components/ExtentDetails';
 
-const App: React.FC = () => {
+function App() {
   const [extent, setExtent] = useState({});
-
-  function handleMapLoad(view: MapView) {
-    loadModules([
-      "esri/widgets/Search",
-      "esri/geometry/support/webMercatorUtils"
-    ]).then(([Search, webMercatorUtils]) => {
-      view.watch("extent", (evt: any) => {
-        setExtent(
-          webMercatorUtils.webMercatorToGeographic(evt.extent).toJSON()
-        );
-      });
-      setExtent(webMercatorUtils.webMercatorToGeographic(view.extent).toJSON());
-
-      var searchWidget = new Search({
-        view: view
-      });
-      view.ui.add(searchWidget, {
-        index: 0,
-        position: "top-right"
-      });
-    });
-  }
 
   return (
     <div className="App">
       <Map
-        mapProperties={{ basemap: "topo-vector" }}
-        viewProperties={{ center: [0, 0], zoom: 3 }}
-        loaderOptions={{ css: true, version: "4.22" }}
-        onLoad={(map, view) => {
-          handleMapLoad(view as MapView);
+        onExtentChange={(newExtent: object) => {
+          setExtent(newExtent);
         }}
       />
       <ExtentDetails extent={extent} />
     </div>
   );
-};
+}
 
 export default App;

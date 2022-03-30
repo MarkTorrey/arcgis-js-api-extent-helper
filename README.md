@@ -7,13 +7,13 @@ Extent helper for web apps in the ArcGIS API for JavaScript
 
 For 3D Camera Helper, check out https://github.com/gavinr/arcgis-js-api-camera-helper
 
+## Technologies
+
 This tool uses the following technologies:
 
 - [ArcGIS API for JavaScript v4](https://developers.arcgis.com/javascript/)
-- [react-arcgis](https://github.com/Esri/react-arcgis)
-- [Esri Loader](https://github.com/Esri/esri-loader)
 - [React](https://reactjs.org/)
-- [Calcite React](https://github.com/Esri/calcite-react)
+- [Calcite Components](https://developers.arcgis.com/calcite-design-system/)
 - [Create React App](https://facebook.github.io/create-react-app/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [and more!](https://github.com/gavinr/arcgis-js-api-extent-helper/blob/master/package.json)

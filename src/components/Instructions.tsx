@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-// import Modal from "calcite-react/Modal";
-import Button from "calcite-react/Button";
-import { CalciteH1, CalciteP } from "calcite-react/Elements";
-import Modal, { ModalActions } from "calcite-react/Modal";
-import QuestionIcon from "calcite-ui-icons-react/QuestionIcon";
+import {
+  CalciteButton,
+  CalciteIcon,
+  CalciteModal
+} from "@esri/calcite-components-react";
 
 export default function Instructions() {
   const [open, setOpen] = useState(false);
@@ -17,26 +17,19 @@ export default function Instructions() {
 
   return (
     <div>
-      <Button
-        transparent
+      <CalciteButton
+        appearance="transparent"
         className="right"
         onClick={() => {
           openModal();
         }}
-        alt="More Information"
         title="More Information"
       >
-        <QuestionIcon />
-      </Button>
-      <Modal
-        open={open}
-        onRequestClose={() => {
-          closeModal();
-        }}
-        appElement={document.body}
-      >
-        <CalciteH1>ArcGIS JS API Extent Helper</CalciteH1>
-        <CalciteP>
+        <CalciteIcon icon="question" />
+      </CalciteButton>
+      <CalciteModal active={open ? true : undefined} disableCloseButton={true}>
+        <div slot="header" id="modal-title">ArcGIS JS API Extent Helper</div>
+        <div slot="content">
           First zoom to the exact extent you'd like to start with, then
           copy/paste the extent into your{" "}
           <a
@@ -47,8 +40,7 @@ export default function Instructions() {
             MapView constructor - extent property
           </a>
           .
-        </CalciteP>
-        <CalciteP>
+
           Discover more information or log an issue by going to{" "}
           <a
             href="https://github.com/gavinr/arcgis-js-api-extent-helper"
@@ -58,17 +50,11 @@ export default function Instructions() {
             github.com/gavinr/arcgis-js-api-extent-helper
           </a>
           .
-        </CalciteP>
-        <ModalActions>
-          <Button
-            onClick={() => {
-              closeModal();
-            }}
-          >
-            Okay
-          </Button>
-        </ModalActions>
-      </Modal>
+        </div>
+        <CalciteButton slot="primary" width="full" onClick={() => {
+          closeModal();
+        }}>OK</CalciteButton>
+      </CalciteModal>
     </div>
   );
 }

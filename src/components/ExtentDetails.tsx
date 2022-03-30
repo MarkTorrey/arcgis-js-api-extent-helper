@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import raw from "raw.macro";
 import beautify from "js-beautify";
-import Button from "calcite-react/Button";
 import Instructions from "./Instructions";
+import * as esriNS from "@arcgis/core/kernel";
+
+import {
+  CalciteButton,
+} from "@esri/calcite-components-react";
 
 interface ExtentDetailsProps {
   extent: object;
@@ -14,13 +18,13 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
 
   useEffect(() => {
     // we should probably change this to, instead of running every time, to only run when "new app" button is clicked.
-    function createCodepen(cameraJsCode: object) {
+    function createCodepen(extentJsCode: object) {
       const styleTemplate = raw("../templates/style.css");
       const htmlHeadTemplate = raw("../templates/head.html");
       const htmlTemplate = raw("../templates/html.html");
       const jsTemplate = raw("../templates/js.txt");
       var jt = beautify.js_beautify(
-        jsTemplate.replace("[EXTENTHERE]", JSON.stringify(cameraJsCode)),
+        jsTemplate.replace("[EXTENTHERE]", JSON.stringify(extentJsCode)),
         { indent_size: 2, space_in_empty_paren: true }
       );
 
@@ -30,9 +34,9 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
         css: styleTemplate,
         js: jt,
         head: htmlHeadTemplate,
-        js_external: "https://js.arcgis.com/4.22/dojo/dojo.js",
+        js_external: `https://js.arcgis.com/${esriNS.version}/dojo/dojo.js`,
         css_external:
-          "https://js.arcgis.com/4.22/esri/css/main.css;https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/css/calcite-web.min.css"
+          `https://js.arcgis.com/${esriNS.version}/esri/css/main.css;https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/css/calcite-web.min.css`
       };
 
       var JSONstring = JSON.stringify(data);
@@ -63,14 +67,14 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
         ref={copyTextArea}
       />
       <br />
-      <Button
+      <CalciteButton
         className="btn btn-clear"
         onClick={() => {
           copyJsonButtonClickHandler();
         }}
       >
         Copy JSON
-      </Button>
+      </CalciteButton>
 
       <form
         action="https://codepen.io/pen/define"
@@ -84,9 +88,9 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
           name="data"
           value={calculatedFullRequest}
         />
-        <Button type="submit" className="right">
+        <CalciteButton type="submit" className="right">
           New app at this location
-        </Button>
+        </CalciteButton>
       </form>
     </div>
   );
