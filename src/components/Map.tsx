@@ -32,10 +32,10 @@ export default function Map({ onExtentChange }: MapProps) {
         });
 
         view.watch("extent", () => {
-          onExtentChange(webMercatorUtils.webMercatorToGeographic(view.extent).toJSON());
+          onExtentChange(webMercatorUtils.webMercatorToGeographic(view.extent, false).toJSON());
         });
 
-        onExtentChange(webMercatorUtils.webMercatorToGeographic(view.extent).toJSON()); // call once!
+        onExtentChange(webMercatorUtils.webMercatorToGeographic(view.extent, false).toJSON()); // call once!
       });
     }
   }, []); // eslint-disable-line
