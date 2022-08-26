@@ -73,10 +73,6 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
       try {
         const sr = new SpatialReference({ wkid: currentWkid });
         if (prjEng.isLoaded()) {
-          const tf = projection.getTransformation(
-            sr,
-            currentExtent.spatialReference
-          );
           const newExtent = projection.project(currentExtent, sr, tf);
           res = JSON.stringify(newExtent, null, 2);
         }
