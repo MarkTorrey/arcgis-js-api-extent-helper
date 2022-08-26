@@ -35,3 +35,13 @@ body {
 .right {
   float: right;
 }
+
+.ctrl-container{
+  display:flex;
+  justify-content: center;
+}
+
+.sr-po-container {
+  padding:3px;
+  margin:2px;
+}

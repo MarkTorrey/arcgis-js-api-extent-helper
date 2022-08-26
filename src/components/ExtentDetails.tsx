@@ -3,7 +3,7 @@ import raw from 'raw.macro';
 import beautify from 'js-beautify';
 import Instructions from './Instructions';
 import * as esriNS from '@arcgis/core/kernel';
-import SpatialReferenceCB from './SpatialReferenceCB';
+import SpatialReferenceCtrl from './SpatialReferenceCtrl';
 import * as projection from '@arcgis/core/geometry/projection';
 import Extent from '@arcgis/core/geometry/Extent';
 import SpatialReference from '@arcgis/core/geometry/SpatialReference';
@@ -18,23 +18,22 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
   const copyTextArea = useRef<HTMLTextAreaElement>(null);
   const [calculatedFullRequest, setCalculatedFullRequest] = useState('');
   const [currentWkid, setCurrentWkid] = useState(4326);
+  const [frmtdExtent, setFrmtdExtent] = useState('');
   const prjEng = projection;
 
   useEffect(() => {
-    prjEng.load().then(() => {
-      console.log('project engine ready');
-    });
+    prjEng.load();
   }, [prjEng]);
 
   useEffect(() => {
     // we should probably change this to, instead of running every time, to only run when "new app" button is clicked.
-    function createCodepen(extentJsCode: object) {
+    function createCodepen(extentJsCode: string) {
       const styleTemplate = raw('../templates/style.css');
       const htmlHeadTemplate = raw('../templates/head.html');
       const htmlTemplate = raw('../templates/html.html');
       const jsTemplate = raw('../templates/js.txt');
       var jt = beautify.js_beautify(
-        jsTemplate.replace('[EXTENTHERE]', JSON.stringify(extentJsCode)),
+        jsTemplate.replace('[EXTENTHERE]', extentJsCode),
         { indent_size: 2, space_in_empty_paren: true }
       );
 
@@ -55,8 +54,8 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
 
       return JSONstring;
     }
-    setCalculatedFullRequest(createCodepen(extent));
-  }, [extent]);
+    setCalculatedFullRequest(createCodepen(frmtdExtent));
+  }, [frmtdExtent]);
 
   function copyJsonButtonClickHandler() {
     if (copyTextArea && copyTextArea.current) {
@@ -66,36 +65,48 @@ export default function ExtentDetails({ extent }: ExtentDetailsProps) {
     }
   }
 
-  const projectAndFormatExtent = (): string => {
+  useEffect(() => {
     const currentExtent = new Extent(extent);
     let res = JSON.stringify(currentExtent, null, 2);
+
     if (currentWkid !== 4326) {
-      const sr = new SpatialReference({ wkid: currentWkid });
-      if (prjEng.isLoaded()) {
-        const newExtent = projection.project(currentExtent, sr);
-        res = JSON.stringify(newExtent, null, 2);
-      } else {
-        console.log('projection engine not loaded');
+      try {
+        const sr = new SpatialReference({ wkid: currentWkid });
+        if (prjEng.isLoaded()) {
+          const tf = projection.getTransformation(
+            sr,
+            currentExtent.spatialReference
+          );
+          const newExtent = projection.project(currentExtent, sr, tf);
+          res = JSON.stringify(newExtent, null, 2);
+        }
+      } catch (error) {
+        setFrmtdExtent(
+          `${currentWkid} doesn't appear to be a supported coordinate system. Please try a different Wkid.`
+        );
+        return;
       }
     }
-    return res;
-  };
+    setFrmtdExtent(res);
+  }, [extent, prjEng, currentWkid]);
 
   return (
     <div className='ExtentDetails'>
       <Instructions />
-      <SpatialReferenceCB
-        currentWkid={currentWkid}
-        wkidDidChange={setCurrentWkid}
-      ></SpatialReferenceCB>
+
       <textarea
         rows={15}
         cols={50}
         readOnly={true}
-        value={projectAndFormatExtent()}
+        value={frmtdExtent}
         ref={copyTextArea}
       />
-      <br />
+
+      <SpatialReferenceCtrl
+        currentWkid={currentWkid}
+        wkidDidChange={setCurrentWkid}
+      ></SpatialReferenceCtrl>
+
       <CalciteButton
         className='btn btn-clear'
         onClick={() => {

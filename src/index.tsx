@@ -12,9 +12,11 @@ import { setAssetPath } from '@esri/calcite-components/dist/components';
 import '@esri/calcite-components/dist/components/calcite-button';
 import '@esri/calcite-components/dist/components/calcite-icon';
 import '@esri/calcite-components/dist/components/calcite-modal';
-import '@esri/calcite-components/dist/components/calcite-combobox';
-import '@esri/calcite-components/dist/components/calcite-combobox-item';
+import '@esri/calcite-components/dist/components/calcite-radio-button';
+import '@esri/calcite-components/dist/components/calcite-radio-button-group';
 import '@esri/calcite-components/dist/components/calcite-label';
+import '@esri/calcite-components/dist/components/calcite-popover';
+import '@esri/calcite-components/dist/components/calcite-input';
 
 setAssetPath('https://unpkg.com/@esri/calcite-components/dist/calcite/assets');
 
