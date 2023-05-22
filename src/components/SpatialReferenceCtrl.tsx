@@ -17,13 +17,13 @@ export default function SpatialReferenceCtrl({
   currentWkid,
 }: SpatialReferenceCBProps) {
   const [poOpen, setPoOpen] = useState(false);
-  const [customWkid, setCustomWkid] = useState(0);
+  const [customWkid, setCustomWkid] = useState(3819);
 
   const customWkidInputDidChange = (
     evt: React.KeyboardEvent<HTMLCalciteInputElement>
   ) => {
     const inVal = parseInt(evt.currentTarget.value) || 0;
-    // probably newed more validation here to ensure
+    // probably need more validation here to ensure
     // the wkid entered is really a supported wkid
     // there's a list of supported wkid's the could possibly be used:
     // https://github.com/Esri/projection-engine-db-doc/blob/master/json/pe_list_geogcs.json
@@ -44,7 +44,7 @@ export default function SpatialReferenceCtrl({
           }
         }}
       >
-        <CalciteLabel layout='inline'>
+        <CalciteLabel title="4326" layout='inline'>
           <CalciteRadioButton
             {...(currentWkid === 4326 ? { checked: true } : {})}
             value={4326}
@@ -52,7 +52,7 @@ export default function SpatialReferenceCtrl({
           WGS84
         </CalciteLabel>
 
-        <CalciteLabel layout='inline'>
+        <CalciteLabel title="102100" layout='inline'>
           <CalciteRadioButton value={102100}></CalciteRadioButton>
           Web Mercator
         </CalciteLabel>
